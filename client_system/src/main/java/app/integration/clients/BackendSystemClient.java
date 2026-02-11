@@ -1,83 +1,44 @@
 package app.integration.clients;
 
-import java.util.List;
-
 import com.lib.integration.HttpClient;
 
-import app.integration.models.NewEmployee;
-import app.integration.models.SavedEmployee;
+import app.integration.models.EmployeeUpdateModel;
+import app.integration.models.NewEmployeeModel;
+import app.integration.models.PageModel;
+import app.integration.models.SavedEmployeeModel;
 
 public class BackendSystemClient extends HttpClient {
 	
 	public BackendSystemClient() {
 		super("http://localhost:8080/");
 	}
-
-	private static final String SERVER_ERROR_REQUEST_PATH = "employees/server_error";
 	
-	public SavedEmployee findById() {
-		return (SavedEmployee) get("employees/1", SavedEmployee.class);
+	public void save() {				
+		NewEmployeeModel employee = new NewEmployeeModel();
+		employee.setName("sample name");
+		employee.setTitle("sample title");
+		post("employees", employee);
+	}
+	
+	/* ******************************************************************************************************** */
+	public SavedEmployeeModel getById() {
+		return (SavedEmployeeModel) get("employees/1", SavedEmployeeModel.class);
 	}	
 	
-	public List<SavedEmployee> findByPage() {
-		return (List<SavedEmployee>) get("employees?pageNumber=1&pageSize=10", List.class);
-	}
-	
-	public void getWithServerError() {
-		get(SERVER_ERROR_REQUEST_PATH, Object.class);
+	public PageModel getPage() {
+		return (PageModel) get("employees?pageIndex=0", PageModel.class);
 	}
 	
 	/* ******************************************************************************************************** */	
-	public void save() {		
-		NewEmployee employee = new NewEmployee();
-		employee.setName("sample name");
-		employee.setTitle("sample title");
-		post("employees", employee);
-	}
-	
-	public void saveWithViolatingPayloadValidations() {
-		NewEmployee employee = new NewEmployee();
-		employee.setName("");
-		employee.setTitle("sample title");
-		post("employees", employee);
-	}
-	
-	public void postWithServerError() {
-		NewEmployee employee = new NewEmployee();
-		employee.setName("sample name");
-		employee.setTitle("sample title");
-		post(SERVER_ERROR_REQUEST_PATH, employee);
+	public void update() {
+		EmployeeUpdateModel employee = new EmployeeUpdateModel();
+		employee.setTitle("updated sample title");
+		put("employees/91", employee);
 	}
 	
 	/* ******************************************************************************************************** */	
-	public void deleteById() {
+	public void delete() {
 		delete("employees/51");
-	}
-	
-	public void deleteWithServerError() {
-		delete(SERVER_ERROR_REQUEST_PATH);
-	}
-	
-	/* ******************************************************************************************************** */	
-	public void updateById() {
-		NewEmployee employee = new NewEmployee();
-		employee.setName("sample name");
-		employee.setTitle("sample title");
-		put("employees/91", employee);
-	}
-	
-	public void updateByIdWithViolatingPayloadValidations() {
-		NewEmployee employee = new NewEmployee();
-		employee.setName("");
-		employee.setTitle("sample title");
-		put("employees/91", employee);
-	}
-	
-	public void putWithServerError() {
-		NewEmployee employee = new NewEmployee();
-		employee.setName("sample name");
-		employee.setTitle("sample title");
-		put(SERVER_ERROR_REQUEST_PATH, employee);
 	}
 
 }

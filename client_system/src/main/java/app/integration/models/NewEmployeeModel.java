@@ -1,6 +1,6 @@
-package app.web.models;
+package app.integration.models;
 
-public class NewEmployee {
+public class NewEmployeeModel {
 
 	private String name;
 

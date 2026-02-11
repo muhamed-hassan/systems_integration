@@ -1,20 +1,47 @@
 package app.persistence.repositories;
 
 import java.util.Iterator;
-import java.util.TreeSet;
+import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import app.persistence.data.InMemoryDataSourceGenerator;
 import app.persistence.entities.Employee;
+import app.persistence.entities.Page;
+import app.persistence.repositories.exceptions.DataNotFoundException;
+import app.web.models.EmployeeUpdateModel;
 
 @Component
 public class EmployeeRepository {
 	
 	@Autowired
 	private InMemoryDataSourceGenerator dataSource;
+	
+	@Value("${page.size}")
+    private int pageSize;
 		
+	public int save(Employee employee) {
+		
+		HashSet<Employee> employees = dataSource.getEmployees();
+		Iterator<Employee> iterator = employees.iterator();	
+		int maxId = 0;
+		while (iterator.hasNext()) {
+			
+			Employee currentElement = iterator.next();
+			if (maxId < currentElement.getId()) {
+				maxId = currentElement.getId();
+			}
+		}		
+		
+		int idOfCreatedEmployee = maxId + 1;		
+		employee.setId(idOfCreatedEmployee);		
+		employees.add(employee);
+		
+		return idOfCreatedEmployee;
+	}	
+
 	public Employee findById(int id) {	
 				
 		Employee foundEmployee = null;		
@@ -29,36 +56,29 @@ public class EmployeeRepository {
 		}
 		
 		if (foundEmployee == null) {
-			throw new RuntimeException("Employee with id " + id + " is not found!");
+			throw new DataNotFoundException("Employee with id " + id + " is not found!");
 		}
 		
 		return foundEmployee;
 	}
 	
-	public TreeSet<Employee> findByPage(int pageNumber, int pageSize) {
+	public Page findPage(int pageIndex) {
 		
-		if (pageNumber < 1) {
-			throw new IllegalArgumentException("pageNumber should be a positive value");
+		if (pageIndex < 0) {
+			throw new IllegalArgumentException("pageIndex should be a positive value");
 		}
 		
-		if (pageSize < 1) {
-			throw new IllegalArgumentException("pageSize should be a positive value");
-		}
+		HashSet<Employee> employees = dataSource.getEmployees();
+		int totalElements = employees.size();				
+		int totalPages = (int) Math.ceil((totalElements * 1.0) / pageSize);
 		
-		TreeSet<Employee> employees = dataSource.getEmployees();
-		int totalSize = employees.size();
-		if (pageSize > totalSize) {
-			throw new IllegalArgumentException("pageSize is out of range");
-		}
-		
-		int availablePages = (int) Math.ceil(totalSize / (pageSize * 1.0));
-		if (pageNumber > availablePages) {
-			throw new IllegalArgumentException("pageNumber is out of range");
+		if (pageIndex > totalPages) {
+			throw new IllegalArgumentException("pageIndex is out of range");
 		}			
 		
-		TreeSet<Employee> collectedElements = new TreeSet<Employee>();		
+		HashSet<Employee> collectedElements = new HashSet<Employee>();		
 		Iterator<Employee> iterator = employees.iterator();		
-		int skippedElements = (pageNumber - 1) * pageSize;
+		int skippedElements = pageIndex * pageSize;
 		int collectedElementsLimit = 1; // max is pageSize
 		int cursor = 0;
 		while (iterator.hasNext()) {
@@ -74,37 +94,30 @@ public class EmployeeRepository {
 				}				
 			}
 		}
+		
+		boolean isFirstPage = (pageIndex == 0);
+		boolean isLastPage = ((pageIndex + 1) == totalPages);
+		
+		Page page = new Page();
+		page.setData(collectedElements);
+		page.setFirstPage(isFirstPage);
+		page.setLastPage(isLastPage);
 
-		return collectedElements;
-	}
+		return page;
+	}	
 	
-	public int save(Employee employee) {
+	public void update(int id, EmployeeUpdateModel employeeUpdateModel) {
 		
-		TreeSet<Employee> employees = dataSource.getEmployees();		
-		int idOfCreatedEmployee = employees.last().getId() + 1;		
-		employee.setId(idOfCreatedEmployee);		
-		employees.add(employee);
-		
-		return idOfCreatedEmployee;
-	}
-	
-	public boolean delete(int id) {
-		
-		Employee employee = findById(id);		
-		boolean removed = dataSource.getEmployees().remove(employee);
-		
-		return removed;
-	}
-	
-	public boolean update(Employee newEmployee) {
-		
-		Employee oldEmployee = findById(newEmployee.getId());
+		Employee oldEmployee = findById(id);
 		
 		// update using a pointer to the old object in memory
-		oldEmployee.setName(newEmployee.getName());
-		oldEmployee.setTitle(newEmployee.getTitle());
+		oldEmployee.setTitle(employeeUpdateModel.getTitle());
+	}
+	
+	public void delete(int id) {
 		
-		return true; // update is done
+		Employee employee = findById(id);		
+		dataSource.getEmployees().remove(employee);
 	}
 	
 }

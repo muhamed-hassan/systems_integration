@@ -1,9 +1,7 @@
 package app.web.controllers;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.persistence.entities.Employee;
+import app.persistence.entities.Page;
 import app.persistence.repositories.EmployeeRepository;
-import app.web.models.NewEmployee;
-import app.web.models.SavedEmployee;
-import app.web.validators.Validator;
+import app.web.models.EmployeeUpdateModel;
+import app.web.models.NewEmployeeModel;
+import app.web.models.PageModel;
+import app.web.models.SavedEmployeeModel;
 
 @RestController
 @RequestMapping("employees")
@@ -28,34 +28,44 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeRepository employeeRepository;
 	
-	@Autowired
-	private Validator validator;
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Object> save(@RequestBody NewEmployeeModel newEmployee) {
 		
+		Employee employee = new Employee();
+		employee.setName(newEmployee.getName());
+		employee.setTitle(newEmployee.getTitle());	
+		
+		employeeRepository.save(employee);		
+    	
+		return new ResponseEntity<Object>(HttpStatus.CREATED);
+	}	
+	
+	/* ******************************************************************************************************** */		
 	@RequestMapping(method = RequestMethod.GET, value = "{id}")
-	public ResponseEntity<SavedEmployee> findById(@PathVariable int id) {
+	public ResponseEntity<SavedEmployeeModel> getById(@PathVariable int id) {
 		
-		Employee employeeEntity = employeeRepository.findById(id);
+		Employee employee = employeeRepository.findById(id);
 		
-		SavedEmployee savedEmployee = new SavedEmployee();
+		SavedEmployeeModel savedEmployee = new SavedEmployeeModel();
 		savedEmployee.setId(id);
-		savedEmployee.setName(employeeEntity.getName());
-		savedEmployee.setTitle(employeeEntity.getTitle());		
+		savedEmployee.setName(employee.getName());
+		savedEmployee.setTitle(employee.getTitle());		
 		
-		return new ResponseEntity<SavedEmployee>(savedEmployee, HttpStatus.OK);
+		return new ResponseEntity<SavedEmployeeModel>(savedEmployee, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public ResponseEntity<List<SavedEmployee>> findByPage(@RequestParam int pageNumber, @RequestParam int pageSize) {
+	public ResponseEntity<PageModel> getPage(@RequestParam int pageIndex) {
 		
-		TreeSet<Employee> employees = employeeRepository.findByPage(pageNumber, pageSize);
+		Page page = employeeRepository.findPage(pageIndex);
 		
-		List<SavedEmployee> collectedElements = new ArrayList<SavedEmployee>();
-		Iterator<Employee> iterator = employees.iterator();		
+		HashSet<SavedEmployeeModel> collectedElements = new HashSet<SavedEmployeeModel>();
+		Iterator<Employee> iterator = page.getData().iterator();		
 		while (iterator.hasNext()) {
 			
 			Employee currentElement = iterator.next();
 			
-			SavedEmployee savedEmployee = new SavedEmployee();
+			SavedEmployeeModel savedEmployee = new SavedEmployeeModel();
 			savedEmployee.setId(currentElement.getId());
 			savedEmployee.setName(currentElement.getName());
 			savedEmployee.setTitle(currentElement.getTitle());
@@ -63,78 +73,30 @@ public class EmployeeController {
 			collectedElements.add(savedEmployee);
 		}		
 		
-		return new ResponseEntity<List<SavedEmployee>>(collectedElements, HttpStatus.OK);
+		PageModel pageModel = new PageModel();
+		pageModel.setData(collectedElements);
+		pageModel.setFirstPage(page.isFirstPage());
+		pageModel.setLastPage(page.isLastPage());
+		
+		return new ResponseEntity<PageModel>(pageModel, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "server_error")
-	public void doServerErrorWithGET() {
+	/* ******************************************************************************************************** */		
+	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
+	public ResponseEntity<Object> update(@PathVariable int id, @RequestBody EmployeeUpdateModel employeeUpdateModel) {
 		
-		if (true) {
-			throw new RuntimeException("forced exception => doServerErrorWithGET()");
-		}
-	}
-	
-	/* ******************************************************************************************************** */	
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Object> save(@RequestBody NewEmployee newEmployee) {
+		employeeRepository.update(id, employeeUpdateModel);
 		
-		validator.validate(newEmployee);
-		
-		Employee employeeEntity = new Employee();
-		employeeEntity.setName(newEmployee.getName());
-		employeeEntity.setTitle(newEmployee.getTitle());	
-		
-		employeeRepository.save(employeeEntity);		
-    	
-		return new ResponseEntity<Object>(HttpStatus.CREATED);
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "server_error")
-	public void doServerErrorWithPOST(@RequestBody NewEmployee newEmployee) {
-		
-		if (true) {
-			throw new RuntimeException("forced exception => doServerErrorWithPOST()");
-		}
+		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 	
 	/* ******************************************************************************************************** */
 	@RequestMapping(method = RequestMethod.DELETE, value = "{id}")
-	public ResponseEntity<Object> deleteById(@PathVariable int id) {
+	public ResponseEntity<Object> delete(@PathVariable int id) {
 		
 		employeeRepository.delete(id);
-		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-	}
-	
-	@RequestMapping(method = RequestMethod.DELETE, value = "server_error")
-	public void doServerErrorWithDELETE() {
-				
-		if (true) {
-			throw new RuntimeException("forced exception => doServerErrorWithDELETE()");
-		}
-	}
-	
-	/* ******************************************************************************************************** */
-	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
-	public ResponseEntity<Object> updateById(@PathVariable int id, @RequestBody NewEmployee newEmployee) {
-		
-		validator.validate(newEmployee);
-		
-		Employee employeeEntity = new Employee();
-		employeeEntity.setId(id);
-		employeeEntity.setName(newEmployee.getName());
-		employeeEntity.setTitle(newEmployee.getTitle());
-		
-		employeeRepository.update(employeeEntity);
 		
 		return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value = "server_error")
-	public void doServerErrorWithPUT(@RequestBody NewEmployee newEmployee) {
-						
-		if (true) {
-			throw new RuntimeException("forced exception => doServerErrorWithPUT()");
-		}
 	}
 
 }

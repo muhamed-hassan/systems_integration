@@ -1,6 +1,6 @@
 package app.persistence.data;
 
-import java.util.TreeSet;
+import java.util.HashSet;
 
 import javax.annotation.PostConstruct;
 
@@ -11,29 +11,23 @@ import app.persistence.entities.Employee;
 @Component
 public class InMemoryDataSourceGenerator {
 	
-	private TreeSet<Employee> employees;
+	private HashSet<Employee> employees;
 	
 	@PostConstruct
-	public void initDataSource() {
+	public void initDataSource() {	
 		
-		System.out.println();
-		System.out.println("initDataSource is starting ...");	
-		
-		employees = new TreeSet<Employee>();
-		for (int cursor = 1; cursor <= 100; cursor++) {
+		employees = new HashSet<Employee>();
+		for (int counter = 1; counter <= 100; counter++) {
 			
 			Employee employee = new Employee();
-			employee.setId(cursor);
-			employee.setName("name _ " + cursor);
-			employee.setTitle("title _ " + cursor);		
+			employee.setId(counter);
+			employee.setName("name _ " + counter);
+			employee.setTitle("title _ " + counter);		
 			employees.add(employee);
 		}		
-		
-		System.out.println("100 elements get allocated 👍");
-		System.out.println();
 	}
 
-	public TreeSet<Employee> getEmployees() {
+	public HashSet<Employee> getEmployees() {
 		return employees;
 	}
 	

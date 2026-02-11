@@ -1,6 +1,6 @@
-package app.integration.models;
+package app.web.models;
 
-public class NewEmployee {
+public class NewEmployeeModel {
 
 	private String name;
 
@@ -20,11 +20,6 @@ public class NewEmployee {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	@Override
-	public String toString() {
-		return "NewEmployee [name=" + name + ", title=" + title + "]";
 	}
 
 }

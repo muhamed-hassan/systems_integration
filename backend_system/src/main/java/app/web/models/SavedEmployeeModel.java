@@ -1,8 +1,8 @@
-package app.persistence.entities;
+package app.web.models;
 
 import java.util.Objects;
 
-public class Employee {
+public class SavedEmployeeModel {
 
 	private int id;
 
@@ -50,7 +50,7 @@ public class Employee {
 		if (getClass() != object.getClass()) {
 			return false;
 		}
-		Employee other = (Employee) object;
+		SavedEmployeeModel other = (SavedEmployeeModel) object;
 		return id == other.getId();
 	}
 	

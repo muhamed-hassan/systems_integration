@@ -1,6 +1,8 @@
-package app.web.models;
+package app.integration.models;
 
-public class SavedEmployee {
+import java.util.Objects;
+
+public class SavedEmployeeModel {
 
 	private int id;
 
@@ -34,24 +36,22 @@ public class SavedEmployee {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
+		return Objects.hash(id);
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object object) {
+		if (this == object) {
 			return true;
-		if (obj == null)
+		}
+		if (object == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != object.getClass()) {
 			return false;
-		SavedEmployee other = (SavedEmployee) obj;
-		if (id != other.id)
-			return false;
-		return true;
+		}
+		SavedEmployeeModel other = (SavedEmployeeModel) object;
+		return id == other.getId();
 	}
 	
 }
