@@ -1,4 +1,4 @@
-package poc.infrastructure.configs;
+package app.infrastructure.configs;
 
 import java.io.IOException;
 

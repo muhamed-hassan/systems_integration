@@ -1,4 +1,4 @@
-package poc.web.error_handler;
+package app.web.error_handler;
 
 import java.util.HashMap;
 import java.util.Map;

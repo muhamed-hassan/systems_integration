@@ -1,4 +1,4 @@
-package poc.persistence.repositories;
+package app.persistence.repositories;
 
 import java.util.Iterator;
 import java.util.TreeSet;
@@ -6,8 +6,8 @@ import java.util.TreeSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import poc.persistence.data.InMemoryDataSourceGenerator;
-import poc.persistence.entities.Employee;
+import app.persistence.data.InMemoryDataSourceGenerator;
+import app.persistence.entities.Employee;
 
 @Component
 public class EmployeeRepository {

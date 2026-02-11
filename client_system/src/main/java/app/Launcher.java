@@ -1,6 +1,6 @@
-package poc;
+package app;
 
-import poc.integration.clients.BackendSystemClient;
+import app.integration.clients.BackendSystemClient;
 
 public class Launcher {
 

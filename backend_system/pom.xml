@@ -11,7 +11,7 @@
 		<version>1.0.0.RELEASE</version>
 	</parent>
 
-	<groupId>poc</groupId>
+	<groupId>app</groupId>
 	<artifactId>backend_system</artifactId>
 	<version>1.0</version>
 

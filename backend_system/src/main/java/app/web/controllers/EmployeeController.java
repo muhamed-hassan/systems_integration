@@ -1,4 +1,4 @@
-package poc.web.controllers;
+package app.web.controllers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import poc.persistence.entities.Employee;
-import poc.persistence.repositories.EmployeeRepository;
-import poc.web.models.NewEmployee;
-import poc.web.models.SavedEmployee;
-import poc.web.validators.Validator;
+import app.persistence.entities.Employee;
+import app.persistence.repositories.EmployeeRepository;
+import app.web.models.NewEmployee;
+import app.web.models.SavedEmployee;
+import app.web.validators.Validator;
 
 @RestController
 @RequestMapping("employees")

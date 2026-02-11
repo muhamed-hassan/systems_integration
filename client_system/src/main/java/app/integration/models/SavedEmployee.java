@@ -1,4 +1,4 @@
-package poc.web.models;
+package app.integration.models;
 
 public class SavedEmployee {
 
@@ -41,17 +41,22 @@ public class SavedEmployee {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(Object that) {
+		if (this == that)
 			return true;
-		if (obj == null)
+		if (that == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (getClass() != that.getClass())
 			return false;
-		SavedEmployee other = (SavedEmployee) obj;
+		SavedEmployee other = (SavedEmployee) that;
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "SavedEmployee [id=" + id + ", name=" + name + ", title=" + title + "]";
 	}
 	
 }

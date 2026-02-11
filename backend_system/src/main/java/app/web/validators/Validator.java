@@ -1,8 +1,8 @@
-package poc.web.validators;
+package app.web.validators;
 
 import org.springframework.stereotype.Component;
 
-import poc.web.models.NewEmployee;
+import app.web.models.NewEmployee;
 
 //https://en.wikipedia.org/wiki/Fail-fast approach is used to report validation errors
 @Component

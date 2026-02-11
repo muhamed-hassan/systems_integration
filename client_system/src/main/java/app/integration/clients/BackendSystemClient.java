@@ -1,11 +1,11 @@
-package poc.integration.clients;
+package app.integration.clients;
 
 import java.util.List;
 
 import com.lib.integration.HttpClient;
 
-import poc.integration.models.NewEmployee;
-import poc.integration.models.SavedEmployee;
+import app.integration.models.NewEmployee;
+import app.integration.models.SavedEmployee;
 
 public class BackendSystemClient extends HttpClient {
 	

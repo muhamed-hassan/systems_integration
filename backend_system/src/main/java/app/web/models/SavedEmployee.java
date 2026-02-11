@@ -1,6 +1,6 @@
-package poc.persistence.entities;
+package app.web.models;
 
-public class Employee implements Comparable<Employee> {
+public class SavedEmployee {
 
 	private int id;
 
@@ -48,15 +48,10 @@ public class Employee implements Comparable<Employee> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Employee other = (Employee) obj;
+		SavedEmployee other = (SavedEmployee) obj;
 		if (id != other.id)
 			return false;
 		return true;
-	}
-
-	@Override
-	public int compareTo(Employee other) {
-		return getId() - other.getId();
 	}
 	
 }

@@ -1,4 +1,4 @@
-package poc.persistence.data;
+package app.persistence.data;
 
 import java.util.TreeSet;
 
@@ -6,7 +6,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Component;
 
-import poc.persistence.entities.Employee;
+import app.persistence.entities.Employee;
 
 @Component
 public class InMemoryDataSourceGenerator {
