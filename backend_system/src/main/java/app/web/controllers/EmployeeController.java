@@ -29,7 +29,7 @@ public class EmployeeController {
 	private EmployeeRepository employeeRepository;
 	
 	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Object> save(@RequestBody NewEmployeeModel newEmployee) {
+	public ResponseEntity<Object> create(@RequestBody NewEmployeeModel newEmployee) {
 		
 		Employee employee = new Employee();
 		employee.setName(newEmployee.getName());

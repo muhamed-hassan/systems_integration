@@ -13,7 +13,7 @@ public class BackendSystemClient extends HttpClient {
 		super("http://localhost:8080/");
 	}
 	
-	public void save() {				
+	public void create() {				
 		NewEmployeeModel employee = new NewEmployeeModel();
 		employee.setName("sample name");
 		employee.setTitle("sample title");
