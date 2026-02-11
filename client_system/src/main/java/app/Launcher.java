@@ -1,24 +1,24 @@
 package app;
 
-import app.integration.clients.BackendSystemClient;
+import app.integration.clients.EmployeeClient;
 
 public class Launcher {
 
 	public static void main(String[] args) {
 		
-		BackendSystemClient backendSystemClient = new BackendSystemClient();
+		EmployeeClient employeeClient = new EmployeeClient();
 
-		backendSystemClient.create();
+		employeeClient.create();
 		
 		/* ******************************************************************************************************** */		
-		backendSystemClient.getById();
-		backendSystemClient.getPage();
+		employeeClient.getById();
+		employeeClient.getPage();
 				
 		/* ******************************************************************************************************** */
-		backendSystemClient.update();
+		employeeClient.update();
 		
 		/* ******************************************************************************************************** */
-		backendSystemClient.delete();
+		employeeClient.delete();
 
 	}
 

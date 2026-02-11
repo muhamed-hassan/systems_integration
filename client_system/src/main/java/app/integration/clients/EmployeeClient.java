@@ -7,9 +7,9 @@ import app.integration.models.NewEmployeeModel;
 import app.integration.models.PageModel;
 import app.integration.models.SavedEmployeeModel;
 
-public class BackendSystemClient extends HttpClient {
+public class EmployeeClient extends HttpClient {
 	
-	public BackendSystemClient() {
+	public EmployeeClient() {
 		super("http://localhost:8080/");
 	}
 	
