@@ -11,7 +11,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.lib.integration</groupId>
+			<groupId>lib</groupId>
         	<artifactId>java-http-client</artifactId>
         	<version>1.0</version>
 		</dependency>

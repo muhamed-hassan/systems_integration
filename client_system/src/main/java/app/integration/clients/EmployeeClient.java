@@ -1,6 +1,6 @@
 package app.integration.clients;
 
-import com.lib.integration.HttpClient;
+import lib.HttpClient;
 
 import app.integration.models.EmployeeUpdateModel;
 import app.integration.models.NewEmployeeModel;
@@ -10,7 +10,7 @@ import app.integration.models.SavedEmployeeModel;
 public class EmployeeClient extends HttpClient {
 	
 	public EmployeeClient() {
-		super("http://localhost:8080/");
+		super("http://localhost:8080/"); // set the value of dnsOfBackend
 	}
 	
 	public void create() {				
